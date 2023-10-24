@@ -25,6 +25,7 @@ class Environment():
         self.create = True
         self.weight_mode = False
         self.curve_mode = True #Nurbs
+        self.show_points = True
 
         self.max_curves = 2
         self.num_curves = 1
@@ -126,6 +127,8 @@ class Environment():
                 self.weight_mode = not self.weight_mode
             case pygame.K_r:
                 self.del_curve = not self.del_curve
+            case pygame.K_t:
+                self.show_points = not self.show_points
             case pygame.K_q:
                 self.active_curve_index -= 1
                 if self.active_curve_index < 0:
@@ -138,7 +141,6 @@ class Environment():
                 self.add_curve(Nurb())
                 self.active_curve_index = len(self.curves) - 1
             case pygame.K_2:
-                self.curve_mode = False
                 self.add_curve(Bezier())
                 self.active_curve_index = len(self.curves) - 1
             case pygame.K_c:
@@ -161,10 +163,11 @@ class Environment():
 
         x_coords, y_coords = self.active_curve().points[:, 0], self.active_curve().points[:, 1]
 
-        for point in self.active_curve().points:
-            pygame.draw.circle(self.screen, BLACK, point[:-2], POINT_RADIUS)
-        for i in range(len(self.active_curve().points) - 1):
-            pygame.draw.line(self.screen, GREY, (int(x_coords[i]), int(y_coords[i])), (int(x_coords[i + 1]), int(y_coords[i + 1])), 1)
+        if self.show_points:
+            for point in self.active_curve().points:
+                pygame.draw.circle(self.screen, BLACK, point[:-2], POINT_RADIUS)
+            for i in range(len(self.active_curve().points) - 1):
+                pygame.draw.line(self.screen, GREY, (int(x_coords[i]), int(y_coords[i])), (int(x_coords[i + 1]), int(y_coords[i + 1])), 1)
 
         for curve in self.curves:
             n = len(curve.points)
@@ -175,14 +178,15 @@ class Environment():
                     pygame.draw.line(self.screen, BLACK, point1, point2, 1)
 
         font = pygame.font.Font(None, 24)
-        for point in self.active_curve().points:
-            if not self.weight_mode:
-                x, y, z, w = point
-                text = font.render(f"P({x}, {y}, {z})", True, BLACK)
-            else:
-                w = point[-1]
-                text = font.render(f"P({w})", True, BLACK)
-            self.screen.blit(text, (int(point[0]), int(point[1])))
+        if self.show_points:
+            for point in self.active_curve().points:
+                if not self.weight_mode:
+                    x, y, z, w = point
+                    text = font.render(f"P({x}, {y}, {z})", True, BLACK)
+                else:
+                    w = point[-1]
+                    text = font.render(f"P({w})", True, BLACK)
+                self.screen.blit(text, (int(point[0]), int(point[1])))
         
         weight_mode_text = font.render(f"Weight Mode: {self.weight_mode}", True, "dark green" if self.weight_mode else "crimson")
         self.screen.blit(weight_mode_text, (20, 20))
@@ -200,6 +204,8 @@ class Environment():
         self.screen.blit(delet_curve, (20, 100))
         curve_text = font.render(f"Active Curve: {self.active_curve_index + 1}", True, "black")
         self.screen.blit(curve_text, (20, 120))
+        point_text_on = font.render(f"Show Support Data: {self.show_points}",  True, "dark green" if self.show_points else "crimson")
+        self.screen.blit(point_text_on, (20, 140))
         
         pygame.display.flip()
 
