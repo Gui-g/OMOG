@@ -1,0 +1,20 @@
+Controls:
+
+click to create point
+1 = Create NURBS (max 6 points for performance reasons)
+2 = Create BEZIER (5 points = degree 4)
+
+q = go to previous curve
+e = go to next curve
+r = delete curve (need to have more than 1 created)
+
+d = delete point toogle
+w = weight mode toogle
+
+if you're on weight mode
+d = decrease weight toogle
+
+c = C0
+
+there are some issues with handling multiples curves (3+), but as it's not necessary for the project I just put a hard limit on curve number
+it always starts creating a NURBS
