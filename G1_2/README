@@ -1,0 +1,22 @@
+Controls:
+
+click to create point
+1 = Create NURBS (max 4 points for performance reasons)
+2 = Create BEZIER (5 points = degree 4)
+
+q = go to previous curve
+e = go to next curve
+r = reset curves
+t = show support data (control points, lines)
+
+d = delete point toogle
+w = weight mode toogle
+
+if you're on weight mode
+d = decrease weight toogle
+
+c = C0
+v = G1
+b = G2
+
+it always starts creating a NURBS
